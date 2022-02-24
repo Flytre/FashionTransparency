@@ -13,4 +13,12 @@ router.get('/transparency_index', (req, res) => {
     })
 })
 
+router.get('/table_data', (req, res) => {
+    getData(data => {
+        res.render("table_visualizer", {
+            "data" : data["total"]
+        })
+    })
+})
+
 module.exports = router;

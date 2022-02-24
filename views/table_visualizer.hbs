@@ -1,0 +1,15 @@
+<table class="visualized_table">
+    <tr>
+        {{#each data.[0]}}
+            <th>{{@key}}</th>
+        {{/each}}
+    </tr>
+
+<tr>
+    {{#each data as |row|}}
+        {{#each row}}
+            <td>{{this}}</td>
+        {{/each}}
+    </tr>
+    {{/each}}
+</table>
