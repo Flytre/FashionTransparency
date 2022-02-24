@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css?family=Garamond");
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113");
+
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: "Garamond", sans-serif;
+    font-weight: 200;
+}
+h1 {
+    font-size:36px
+}
+.navbar {
+    position: static;
+    background-color: #90bb23;
+    height: 72px;
+    margin: 24px 16px;
+}
+.navbar a, .navbar img {
+    padding: 12px 40px;
+    text-decoration: none;
+    cursor: pointer;
+    height: inherit;
+    display: inline;
+    vertical-align: middle;
+    font-size: 20px;
+    margin-inline: 12px;
+    color: black;
+}
+.navbar a:hover {
+    color: #000!important;
+    background-color: #fff!important;
+}
+header {
+    text-align:center;
+    background-color: #86C5DA;
+    padding: 116px 64px;
+    margin: 24px 16px;
+}
+.jumbo{
+    font-size:64px!important;
+}
+.xlarge{
+    font-size:24px!important;
+}
+body {
+    background-image: url("https://www.mandyspizza.com/wp-content/uploads/2017/01/BACKGROUND-Light-Wood-Background.jpg");
+}
