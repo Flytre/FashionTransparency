@@ -6,105 +6,110 @@ const router = express.Router({strict: true})
 const {getData} = require('./load_data.js')
 
 router.get('/transparency_index', (req, res) => {
-    var table = req.query.table;
-    if(table === undefined) {
-        table = "total"
-    }
-    
+    //if the parameter is undefined, it defaults to total
+    let tableName = req.query.table || "total";
+
     getData(data => {
-        var total_points = 200;
-        var x_axis = [];
-        var y_axis = [];
-        var bubble_size = [];
-        
-        
-        for (const i in data[table]) {  //for each brand
-                x_axis.push(data[table][i]['Brand Name'])   //array of brand names in alphabetical order
-                //console.log(data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]])
-                y_axis.push(data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]])      //array of total score in section, index corresponds to x_axis index
-                bubble_size.push((data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]]/total_points)*100)  //scales bubble size
+
+        let totalPoints = 200;
+        let xAxis = []; //stores the x value for each brand
+        let yAxis = []; //stores the y value for each brand
+        let bubbleSize = []; //stores the bubble size for each brand
+        let table = data[tableName];
+        let graphTitle = "Total Points";
+
+        //fill the above arrays
+        for (const rowIndex in table) {
+
+            let row = table[rowIndex];
+            let headers = Object.keys(row);
+
+            xAxis.push(row['Brand Name'])
+            yAxis.push(row[headers[headers.length - 1]]) //value of last key in row, the total points
+            bubbleSize.push((row[headers[headers.length - 1]] / totalPoints) * 100)  //scale bubble size
         }
-        var trace1 = {
-            x: x_axis,
-            y: y_axis,
-            mode: 'markers',
-            marker: {
-                size: bubble_size
+
+        //set the graph title
+        if (tableName !== "total") {
+            for (const rowIndex in data["section_to_name"]) {
+                if (data["section_to_name"][rowIndex]['Section'] == tableName) {
+                    graphTitle = data["section_to_name"][rowIndex];
+                }
             }
-        };
-    
-        var graph_data = [trace1];
-    
-        var graph_title = "Total Points";
-        if (table !== "total") {
-            for (const i in data["section_to_name"]) {
-                if (data["section_to_name"][i]['Section'] == table) {graph_title = data["section_to_name"][i];}
-            }
-            graph_title = data["section_to_name"]
+            graphTitle = data["section_to_name"]
         }
-        var layout = {
-            title: graph_title,
-            showlegend: false,
-        };
+
         res.render("transparency_index", {
-        "data" : data["total"],
-        "section_name" : data["section_to_name"],
-        "graph" : JSON.stringify({
-            "data": graph_data,
-            "layout": layout
-        })
+            "data": data["total"],
+            "section_name": data["section_to_name"],
+            "graph": JSON.stringify({
+                "data": [{
+                    x: xAxis,
+                    y: yAxis,
+                    mode: 'markers',
+                    marker: {
+                        size: bubbleSize
+                    }
+                }],
+                "layout": {
+                    title: graphTitle,
+                    showlegend: false,
+                }
+            })
         })
     })
 })
 
-
-router.get('/transparency_index', (req))
-
 router.get('/table_data', (req, res) => {
     let table = req.query.table;
-    
-    if(table === undefined) {
+
+    if (table === undefined) {
         table = "total"
     }
-    
+
     getData(data => {
         res.render("table_visualizer", {
-            "data" : data[table]
+            "data": data[table]
         })
     })
 })
 
 router.get('/compare_chart', (req, res) => {
     const {brand_1, brand_2, category} = req.query;
-    var b1, b2;
-    var new_data = [];
-    if (category !== "") {  //if category is not selected
-        getData(data => {
-            for (const i in data[category]) {       //for each brand
-                if (brand_1 !== "" && data[category][i]['Brand Name'] == brand_1) {b1 = data[category][i];}     
-                else if (brand_2 !== "" && data[category][i]['Brand Name'] == brand_2) {b2 = data[category][i];}//selects correct brands and corresponding data
-            }
-            for (const i in Object.keys(data[category][0])) {   //rearrange data into [column header, brand1 data, brand2 data] so easier to display
-                var temp = [Object.keys(data[category][0])[i]]; 
-                if (b1 !== undefined){
-                    temp.push(b1[Object.keys(data[category][0])[i]])
-                } else {
-                    temp.push("")
-                }
-                if (b2 !== undefined) {
-                    temp.push(b2[Object.keys(data[category][0])[i]])
-                } else {
-                    temp.push("")
-                }
-                new_data.push(temp)
-            }
-            res.render("compare_table", {
-                "data" : new_data
-            })
-        })
-    } else {
+
+    let brand1Data, brand2Data;
+    const customTable = []; //stores a custom table constructed using the given query parameters
+
+    if (category === "" || category === undefined) {
         res.render("selection_error")
     }
+
+    getData(data => {
+        let table = data[category];
+
+        //selects correct brands and corresponding data
+        for (const row_index in table) {
+            if (table[row_index]['Brand Name'] === brand_1) {
+                brand1Data = table[row_index];
+            } else if (table[row_index]['Brand Name'] === brand_2) {
+                brand2Data = table[row_index];
+            }
+        }
+
+        if (brand1Data === undefined || brand2Data === undefined) {
+            res.render("selection_error")
+        }
+
+        let headers = Object.keys(brand1Data)
+
+        headers.forEach(header => {
+            customTable.push([header, brand1Data[header], brand2Data[header]])
+        })
+
+        res.render("compare_table", {
+            "data": customTable
+        })
+    })
 })
 
 module.exports = router;
