@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+.label {
+    background-color: lightblue;
+}
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 100%;
+    min-width: 200px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:nth-child(odd){background-color: #fff;}
+</style>
+</head>
+<table>
+    {{#each data}}
+        <td class="label">{{this.[0]}}</td>
+        <td style=>{{this.[1]}}</td>
+        <td style=>{{this.[2]}}</td>
+    </tr>
+    {{/each}}
+</table>

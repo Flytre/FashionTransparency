@@ -1,0 +1,33 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="css/template.css">
+</head>
+<p>Hello this is a test</p>
+<form action="./update_chart" target="data_table_container">
+    <div class="dropdown">
+        <select name="requirement" id="id_requirement">
+            <option value="">Select Requirements</option>
+            {{#each data.[0]}}
+                <option value ="{{@key}}">{{@key}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="dropdown">
+        <select name="brand_2" id="id_brand_2">
+            <option value="">Select Brand</option>
+            {{#each data}}
+                <option value ="{{this.[Brand Name]}}">{{this.[Brand Name]}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="dropdown">
+        <select name="category" id="id_category" style="text-overflow: ellipsis;">
+            <option value="">Select Category</option>
+            {{#each section_name}}
+                <option value ="{{this.[Section]}}">{{this.[Title]}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <button type="submit" value="Submit">Compare</button>
+    <button type="button" id="close">Close</button>
+</form>
+<iframe name="results"></iframe>

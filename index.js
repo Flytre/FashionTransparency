@@ -26,6 +26,9 @@ app.use(shop)
 const transparency_index = require('./scripts/transparency_index.js')
 app.use(transparency_index)
 
+const test = require('./scripts/test.js')
+app.use(test)
+
 const sustainable = require('./scripts/sustainable.js')
 app.use(sustainable)
 

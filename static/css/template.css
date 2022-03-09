@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Garamond");
 @import url("https://fonts.googleapis.com/css?family=Montserrat");
 @import url("https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113");
+@import url("https://cdn.onlinewebfonts.com/svg/img_197388.png");
 
 body, h1, h2, h3, h4, h5, h6 {
     font-family: "Garamond", sans-serif;
@@ -9,6 +10,109 @@ body, h1, h2, h3, h4, h5, h6 {
 h1 {
     font-size:36px
 }
+
+/* Dropdown Button */
+.dropdown select {
+  background-color: #90bb23;
+  color: black;
+  padding: 16px;
+  margin: 16px;
+  font-size: 20px;
+  border: none;
+  font-family: "Garamond";
+  border-radius: 10px;
+  max-width: 240px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover select {background-color: #3e8e41;}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+#overlay button:hover {background-color: #3e8e41;}
+
+#overlay button {
+    background-color: #90bb23;
+    color: black;
+    padding: 16px;
+    margin: 16px;
+    font-size: 20px;
+    border: none;
+    font-family: "Garamond";
+    border-radius: 10px;
+}
+
+#filter_container button:hover {background-color: #3e8e41;}
+
+#filter_container button {
+    background-color: #90bb23;
+    color: black;
+    padding: 16px;
+    margin: 16px;
+    font-size: 20px;
+    border: none;
+    font-family: "Garamond";
+    border-radius: 10px;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 75%; /* Full width (cover the whole page) */
+  height: 75%; /* Full height (cover the whole page) */
+  top: 12.5%;
+  background-color: white; /* Black background with opacity */
+  cursor: pointer; /* Add a pointer on hover */
+  margin: 0px 180px;
+  border: 3px solid lightgray;
+}
+
+#filter_container {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 75%; /* Full width (cover the whole page) */
+  height: 75%; /* Full height (cover the whole page) */
+  top: 12.5%;
+  background-color: white; /* Black background with opacity */
+  cursor: pointer; /* Add a pointer on hover */
+  margin: 0px 180px;
+  border: 3px solid lightgray;
+}
+
+#overlay iframe {
+    height: 82%;
+    width: 96%;
+    margin-left:20px;
+    margin-right:20px;
+    border: none;
+}
+
 .navbar {
     position: static;
     background-color: #90bb23;
@@ -26,6 +130,39 @@ h1 {
     margin-inline: 12px;
     color: black;
 }
+
+.tool_bar {
+    height: 72px;
+    margin: 12px 24px;
+}
+
+.tool_bar_item {
+    padding: 12px 40px;
+    text-decoration: none;
+    cursor: pointer;
+    height: 24;
+    display: inline;
+    vertical-align: middle;
+    font-size: 12px;
+    margin: 12px;
+    border-style: solid;
+    border-color: #07911e;
+    background-color:#e1fade;
+    border-radius: 10px;
+    color: black;
+}
+
+#table-search-button {
+    width: 50px;
+    height: 50px;
+    display: inline;
+    padding: 15px 5px;
+}
+
+.tool_bar_item .search_icon {
+    background-image: url("https://cdn.onlinewebfonts.com/svg/img_197388.png");
+}
+
 .navbar a:hover {
     color: #000!important;
     background-color: #fff!important;
@@ -36,6 +173,13 @@ header {
     padding: 116px 64px;
     margin: 24px 16px;
 }
+
+#data_table_container {
+    margin: 24px 16px;
+    padding: 0px 64px;
+    height: 500px;
+}
+
 .jumbo{
     font-size:64px!important;
 }
@@ -55,6 +199,7 @@ body {
 .visualized_table td, #customers th {
     border: 1px solid #ddd;
     padding: 8px;
+    white-space:pre
 }
 
 .visualized_table tr:nth-child(even){background-color: #f2f2f2;}

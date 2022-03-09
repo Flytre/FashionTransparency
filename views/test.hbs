@@ -5,7 +5,7 @@
           href="https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113">
     <title>Transparency Index</title>
     <link rel="stylesheet" type="text/css" href="css/template.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.10.1.min.js"></script>
 </head>
 
@@ -15,23 +15,21 @@
 <div class="navbar">
     <img style="padding: 0!important; margin-inline: 0!important" src="img/temp_logo.jpg">
     <a href="../">Home</a>
-    <a href="transparency_index" style="background-color: white;">Transparency Index</a>
+    <a href="transparency_index">Transparency Index</a>
     <a href="sustainable">Sustainable Brands</a>
     <a href="map">Store Locator</a>
     <a href="shop">Shop Online</a>
-    <a href="test">Test</a>
+    <a href="test" style="background-color: white;">Test</a>
 </div>
 
 <div class="tool_bar">
     <form id="data_search">
-        <div class="dropdown">
-        <button class="tool_bar_item" style="width: 200px; border-width: 2px; text-overflow: ellipsis;">Select Category</button>
-        <div class="dropdown-content">
+        <select class="tool_bar_item" name="category" id="table" style="width: 200px; border-width: 2px; text-overflow: ellipsis;">
+            <option value="">Select Category</option>
             {{#each section_name}}
-                <button onclick="changeChart("+{{this.[Section]}}+")">{{this.[Title]}}</button>
+                <option value ="{{this.[Section]}}">{{this.[Title]}}</option>
             {{/each}}
-          </div>
-        </div>
+        </select>
         <button class="tool_bar_item" type="button" id="compare">Compare</button>
         <button class="tool_bar_item" type="button" id="filter">Filter</button>
         <input style="padding: 12px!important;" class="tool_bar_item" type="search" id="query" name="q" placeholder="Search..."> 

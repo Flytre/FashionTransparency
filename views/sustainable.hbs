@@ -4,20 +4,33 @@
           href="https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113">
     <title>Sustainable Brands</title>
     <link rel="stylesheet" type="text/css" href="css/template.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
 
+
 <!-- Navbar -->
 <div class="navbar">
-    <img style="padding: 0px!important; margin-inline: 0px!important"
-         src="https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113">
+    <img style="padding: 0px!important; margin-inline: 0px!important" src="img/temp_logo.jpg">
     <a href="../" >Home</a>
     <a href="transparency_index">Transparency Index</a>
     <a href="sustainable" style="background-color: white;">Sustainable Brands</a>
     <a href="map">Store Locator</a>
     <a href="shop">Shop Online</a>
+    <a href="test">Test</a>
 </div>
+
+<div id="data_table_container">
+
+</div>
+
+<script>
+    $.get("./table_data?table=sustainable_brands", (data) => {
+        let html = $.parseHTML(data)
+        $("#data_table_container").append(html)
+    })
+</script>
 
 </body>
 </html>

@@ -5,7 +5,7 @@ const router = express.Router({strict: true})
 
 const {getData} = require('./load_data.js')
 
-router.get('/transparency_index', (req, res) => {
+router.get('/test', (req, res) => {
     var table = req.query.table;
     if(table === undefined) {
         table = "total"
@@ -16,14 +16,13 @@ router.get('/transparency_index', (req, res) => {
         var x_axis = [];
         var y_axis = [];
         var bubble_size = [];
-        
-        
         for (const i in data[table]) {  //for each brand
                 x_axis.push(data[table][i]['Brand Name'])   //array of brand names in alphabetical order
                 //console.log(data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]])
                 y_axis.push(data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]])      //array of total score in section, index corresponds to x_axis index
                 bubble_size.push((data[table][i][Object.keys(data[table][i])[Object.keys(data[table][i]).length-1]]/total_points)*100)  //scales bubble size
         }
+        console.log(x_axis)
         var trace1 = {
             x: x_axis,
             y: y_axis,
@@ -45,8 +44,15 @@ router.get('/transparency_index', (req, res) => {
         var layout = {
             title: graph_title,
             showlegend: false,
+            height: 600,
+            width: 600
         };
-        res.render("transparency_index", {
+        console.log({
+            "data": graph_data,
+            "layout": layout
+        })
+        //Plotly.newPlot('data_table_container', graph_data, layout);
+        res.render("test", {
         "data" : data["total"],
         "section_name" : data["section_to_name"],
         "graph" : JSON.stringify({
@@ -56,9 +62,6 @@ router.get('/transparency_index', (req, res) => {
         })
     })
 })
-
-
-router.get('/transparency_index', (req))
 
 router.get('/table_data', (req, res) => {
     let table = req.query.table;
@@ -78,20 +81,20 @@ router.get('/compare_chart', (req, res) => {
     const {brand_1, brand_2, category} = req.query;
     var b1, b2;
     var new_data = [];
-    if (category !== "") {  //if category is not selected
+    if (category !== null) {
         getData(data => {
-            for (const i in data[category]) {       //for each brand
-                if (brand_1 !== "" && data[category][i]['Brand Name'] == brand_1) {b1 = data[category][i];}     
-                else if (brand_2 !== "" && data[category][i]['Brand Name'] == brand_2) {b2 = data[category][i];}//selects correct brands and corresponding data
+            for (const i in data[category]) {
+                if (brand_1 !== null && data[category][i]['Brand Name'] == brand_1) {b1 = data[category][i];}
+                else if (brand_2 !== null && data[category][i]['Brand Name'] == brand_2) {b2 = data[category][i];}
             }
-            for (const i in Object.keys(data[category][0])) {   //rearrange data into [column header, brand1 data, brand2 data] so easier to display
-                var temp = [Object.keys(data[category][0])[i]]; 
-                if (b1 !== undefined){
+            for (const i in Object.keys(data[category][0])) {
+                var temp = [Object.keys(data[category][0])[i]];
+                if (b1 !== null){
                     temp.push(b1[Object.keys(data[category][0])[i]])
                 } else {
                     temp.push("")
                 }
-                if (b2 !== undefined) {
+                if (b2 !== null) {
                     temp.push(b2[Object.keys(data[category][0])[i]])
                 } else {
                     temp.push("")
@@ -102,8 +105,6 @@ router.get('/compare_chart', (req, res) => {
                 "data" : new_data
             })
         })
-    } else {
-        res.render("selection_error")
     }
 })
 
