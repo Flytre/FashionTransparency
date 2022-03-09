@@ -17,6 +17,9 @@ app.get('/', (req, res) => {
 const load_data = require('./scripts/load_data.js')
 app.use(load_data.router)
 
+const seeded_random = require('./scripts/seeded_random')
+app.use(seeded_random.router)
+
 const map = require('./scripts/map.js')
 app.use(map)
 

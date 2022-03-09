@@ -4,6 +4,16 @@ const router = express.Router({strict: true})
 
 
 const {getData} = require('./load_data.js')
+const {seededRandom} = require('./seeded_random.js')
+
+
+function createColor(red, green, blue) {
+    return `rgb(${red},${green},${blue},0.5)`
+}
+
+function randomColor(rndInt) {
+    return createColor(0, rndInt(64, 192), rndInt(64, 192))
+}
 
 router.get('/transparency_index', (req, res) => {
     //if the parameter is undefined, it defaults to total
@@ -15,7 +25,9 @@ router.get('/transparency_index', (req, res) => {
         let xAxis = []; //stores the x value for each brand
         let yAxis = []; //stores the y value for each brand
         let bubbleSize = []; //stores the bubble size for each brand
+        let colors = []; //stores the color of each bubble
         let table = data[tableName];
+        let names = [];
         let graphTitle = "Total Points";
 
         //fill the above arrays
@@ -23,10 +35,16 @@ router.get('/transparency_index', (req, res) => {
 
             let row = table[rowIndex];
             let headers = Object.keys(row);
+            let score = row[headers[headers.length - 1]]
 
-            xAxis.push(row['Brand Name'])
-            yAxis.push(row[headers[headers.length - 1]]) //value of last key in row, the total points
-            bubbleSize.push((row[headers[headers.length - 1]] / totalPoints) * 100)  //scale bubble size
+            const {rnd, rndInt, shuffle} = seededRandom({seed: "" + row['Brand Name']});
+
+
+            xAxis.push(rnd(0, 100))
+            yAxis.push(rnd(0, 100))
+            names.push(row['Brand Name'] + '<br>Transparency Rating: ' + score)
+            bubbleSize.push(((score / totalPoints) * 100))  //scale bubble size
+            colors.push(randomColor(rndInt))
         }
 
         //set the graph title
@@ -47,13 +65,33 @@ router.get('/transparency_index', (req, res) => {
                     x: xAxis,
                     y: yAxis,
                     mode: 'markers',
+                    text: names,
                     marker: {
-                        size: bubbleSize
+                        size: bubbleSize,
+                        color: colors
                     }
                 }],
                 "layout": {
                     title: graphTitle,
                     showlegend: false,
+                    paper_bgcolor: 'rgba(0,0,0,0)',
+                    plot_bgcolor: 'rgba(0,0,0,0)',
+                    xaxis: {
+                        showgrid: false,
+                        automargin: true,
+                        zeroline: false,
+                        visible: false
+                    },
+                    yaxis: {
+                        showgrid: false,
+                        automargin: true,
+                        zeroline: false,
+                        visible: false
+
+                    },
+                    autosize: false,
+                    width: 1000,
+                    height: 1000
                 }
             })
         })
