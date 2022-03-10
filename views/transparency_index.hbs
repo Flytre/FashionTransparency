@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html lang="en">
 <head>
     <link rel="shortcut icon"
           href="https://lh3.googleusercontent.com/eLf3Ye78fjSRAVadTWiU_FyN69LKLvuNp_1b7eAnNJlB5BKyNBVqGtZ0Nl2S8k0fk7mXeQ=s113">
@@ -25,17 +25,25 @@
 <div class="tool_bar">
     <form id="data_search">
         <div class="dropdown">
-        <button class="tool_bar_item" style="width: 200px; border-width: 2px; text-overflow: ellipsis;">Select Category</button>
-        <div class="dropdown-content">
-            {{#each section_name}}
-                <button onclick="changeChart("+{{this.[Section]}}+")">{{this.[Title]}}</button>
-            {{/each}}
-          </div>
+            <button class="tool_bar_item" style="width: 200px; border-width: 2px; text-overflow: ellipsis;">Select
+                Category
+            </button>
+            <div class="dropdown-content">
+                {{#each section_name}}
+                    <button onclick="changeChart(" +{{this.[Section]}}+
+                    ")">{{this.[Title]}}</button>
+                {{/each}}
+            </div>
         </div>
         <button class="tool_bar_item" type="button" id="compare">Compare</button>
         <button class="tool_bar_item" type="button" id="filter">Filter</button>
-        <input style="padding: 12px!important;" class="tool_bar_item" type="search" id="query" name="q" placeholder="Search..."> 
-        <button class="tool_bar_item" id='table-search-button'><svg width="13" height="13" viewBox="0 0 13 13"><title>search</title><path d="m4.8495 7.8226c0.82666 0 1.5262-0.29146 2.0985-0.87438 0.57232-0.58292 0.86378-1.2877 0.87438-2.1144 0.010599-0.82666-0.28086-1.5262-0.87438-2.0985-0.59352-0.57232-1.293-0.86378-2.0985-0.87438-0.8055-0.010599-1.5103 0.28086-2.1144 0.87438-0.60414 0.59352-0.8956 1.293-0.87438 2.0985 0.021197 0.8055 0.31266 1.5103 0.87438 2.1144 0.56172 0.60414 1.2665 0.8956 2.1144 0.87438zm4.4695 0.2115 3.681 3.6819-1.259 1.284-3.6817-3.7 0.0019784-0.69479-0.090043-0.098846c-0.87973 0.76087-1.92 1.1413-3.1207 1.1413-1.3553 0-2.5025-0.46363-3.4417-1.3909s-1.4088-2.0686-1.4088-3.4239c0-1.3553 0.4696-2.4966 1.4088-3.4239 0.9392-0.92727 2.0864-1.3969 3.4417-1.4088 1.3553-0.011889 2.4906 0.45771 3.406 1.4088 0.9154 0.95107 1.379 2.0924 1.3909 3.4239 0 1.2126-0.38043 2.2588-1.1413 3.1385l0.098834 0.090049z"></path></svg></button>
+        <input style="padding: 12px!important;" class="tool_bar_item" type="search" id="query" name="q"
+               placeholder="Search...">
+        <button class="tool_bar_item" id='table-search-button'>
+            <svg width="13" height="13" viewBox="0 0 13 13"><title>search</title>
+                <path d="m4.8495 7.8226c0.82666 0 1.5262-0.29146 2.0985-0.87438 0.57232-0.58292 0.86378-1.2877 0.87438-2.1144 0.010599-0.82666-0.28086-1.5262-0.87438-2.0985-0.59352-0.57232-1.293-0.86378-2.0985-0.87438-0.8055-0.010599-1.5103 0.28086-2.1144 0.87438-0.60414 0.59352-0.8956 1.293-0.87438 2.0985 0.021197 0.8055 0.31266 1.5103 0.87438 2.1144 0.56172 0.60414 1.2665 0.8956 2.1144 0.87438zm4.4695 0.2115 3.681 3.6819-1.259 1.284-3.6817-3.7 0.0019784-0.69479-0.090043-0.098846c-0.87973 0.76087-1.92 1.1413-3.1207 1.1413-1.3553 0-2.5025-0.46363-3.4417-1.3909s-1.4088-2.0686-1.4088-3.4239c0-1.3553 0.4696-2.4966 1.4088-3.4239 0.9392-0.92727 2.0864-1.3969 3.4417-1.4088 1.3553-0.011889 2.4906 0.45771 3.406 1.4088 0.9154 0.95107 1.379 2.0924 1.3909 3.4239 0 1.2126-0.38043 2.2588-1.1413 3.1385l0.098834 0.090049z"></path>
+            </svg>
+        </button>
     </form>
 </div>
 
@@ -45,7 +53,7 @@
             <select name="brand_1" id="id_brand_1">
                 <option value="">Select Brand</option>
                 {{#each data}}
-                    <option value ="{{this.[Brand Name]}}">{{this.[Brand Name]}}</option>
+                    <option value="{{this.[Brand Name]}}">{{this.[Brand Name]}}</option>
                 {{/each}}
             </select>
         </div>
@@ -53,7 +61,7 @@
             <select name="brand_2" id="id_brand_2">
                 <option value="">Select Brand</option>
                 {{#each data}}
-                    <option value ="{{this.[Brand Name]}}">{{this.[Brand Name]}}</option>
+                    <option value="{{this.[Brand Name]}}">{{this.[Brand Name]}}</option>
                 {{/each}}
             </select>
         </div>
@@ -61,12 +69,12 @@
             <select name="category" id="id_category" style="text-overflow: ellipsis;">
                 <option value="">Select Category</option>
                 {{#each section_name}}
-                    <option value ="{{this.[Section]}}">{{this.[Title]}}</option>
+                    <option value="{{this.[Section]}}">{{this.[Title]}}</option>
                 {{/each}}
             </select>
         </div>
         <button type="submit" value="Submit">Compare</button>
-        <button type="button" id="close">Close</button>
+        <button type="button" id="close" class="close-overlay">Close</button>
     </form>
     <iframe name="results"></iframe>
 </div>
@@ -76,41 +84,20 @@
             <select name="requirement" id="id_requirement">
                 <option value="">Select Requirements</option>
                 {{#each data.[0]}}
-                    <option value ="{{@key}}">{{@key}}</option>
+                    <option value="{{@key}}">{{@key}}</option>
                 {{/each}}
             </select>
-            {{!--Choose multiple requirements, min score in scetion, max score in section--}}
+            {{!--Choose multiple requirements, min score in section, max score in section--}}
         </div>
         <button type="submit" value="Submit">Apply</button>
-        <button type="button" id="close2">Close</button>
+        <button type="button" id="close2" class="close-overlay">Close</button>
     </form>
 </div>
 
 <script>
-    const comp = document.getElementById("compare");
-    const clse = document.getElementById("close");
-    const clse2 = document.getElementById("close2");
-    const filter = document.getElementById("filter");
-    comp.addEventListener("click", function () {
-    if (document.getElementById("overlay").style.display == "none") {
-        document.getElementById("overlay").style.display = "block";
-    } else {
-        document.getElementById("overlay").style.display = "none";
-    }
-    });
-    clse.addEventListener("click", function () {
-        document.getElementById("overlay").style.display = "none";
-    });
-    clse2.addEventListener("click", function () {
-        document.getElementById("filter_container").style.display = "none";
-    });
-    filter.addEventListener("click", function () {
-    if (document.getElementById("filter_container").style.display == "none") {
-        document.getElementById("filter_container").style.display = "block";
-    } else {
-        document.getElementById("filter_container").style.display = "none";
-    }
-    });
+    $("#compare").on('click', () => $("#overlay").fadeToggle(500))
+    $(".close-overlay").on('click', () => $("#overlay").fadeOut(500))
+    $("#filter").on('click', () => $("#filter_container").fadeToggle(500))
 </script>
 
 <div id="data_table_container">
@@ -118,7 +105,20 @@
 </div>
 
 <script>
-Plotly.newPlot("data_table_container", {{{graph}}});
+    Plotly.newPlot("data_table_container", {{{graph}}});
+
+    document.getElementById('data_table_container').on('plotly_click', data => {
+        let brand = '';
+
+        //last index should have the 'nearest' point
+        //data.points only contains points overlapping with the cursor, not all points
+        let pointData = data.points[data.points.length - 1];
+        let customData = pointData.data.customData;
+
+        brand = customData[pointData.text].brand
+
+        alert('Display Popup with information on:\n\n' + brand);
+    });
 </script>
 
 </body>

@@ -21,14 +21,22 @@ router.get('/transparency_index', (req, res) => {
 
     getData(data => {
 
-        let totalPoints = 200;
         let xAxis = []; //stores the x value for each brand
         let yAxis = []; //stores the y value for each brand
         let bubbleSize = []; //stores the bubble size for each brand
         let colors = []; //stores the color of each bubble
         let table = data[tableName];
         let names = [];
+        let customData = {};
         let graphTitle = "Total Points";
+
+        let maxPoints = parseInt( //the maximum score any brand has
+            table.map(brand => {
+                let headers = Object.keys(brand);
+                return brand[headers[headers.length - 1]] //get the total score of the brand
+            }).reduce((currentMax, contender) => {
+                return parseInt(currentMax) > parseInt(contender) ? currentMax : contender //reduce to the max score
+            }))
 
         //fill the above arrays
         for (const rowIndex in table) {
@@ -37,20 +45,29 @@ router.get('/transparency_index', (req, res) => {
             let headers = Object.keys(row);
             let score = row[headers[headers.length - 1]]
 
-            const {rnd, rndInt, shuffle} = seededRandom({seed: "" + row['Brand Name']});
+            //what's happening here is the creation of a seeded random function
+            //that means if the same seed is passed in the same sequence of random values will always follow
+            //this allows the positions of all the dots to be arbitrary but not change
+            const {rnd, rndInt} = seededRandom({seed: "" + row['Brand Name']});
 
 
             xAxis.push(rnd(0, 100))
             yAxis.push(rnd(0, 100))
-            names.push(row['Brand Name'] + '<br>Transparency Rating: ' + score)
-            bubbleSize.push(((score / totalPoints) * 100))  //scale bubble size
+
+            let displayName = row['Brand Name'] + '<br>Transparency Rating: ' + score;
+
+            names.push(displayName)
+            bubbleSize.push(((score / maxPoints) * 100) + 20)  //scale bubble size
             colors.push(randomColor(rndInt))
+            customData[displayName] = {
+                "brand": row['Brand Name']
+            }
         }
 
         //set the graph title
         if (tableName !== "total") {
             for (const rowIndex in data["section_to_name"]) {
-                if (data["section_to_name"][rowIndex]['Section'] == tableName) {
+                if (data["section_to_name"][rowIndex]['Section'] === tableName) {
                     graphTitle = data["section_to_name"][rowIndex];
                 }
             }
@@ -69,7 +86,8 @@ router.get('/transparency_index', (req, res) => {
                     marker: {
                         size: bubbleSize,
                         color: colors
-                    }
+                    },
+                    customData: customData //custom property so we can access brand names on the client
                 }],
                 "layout": {
                     title: graphTitle,
@@ -89,9 +107,12 @@ router.get('/transparency_index', (req, res) => {
                         visible: false
 
                     },
-                    autosize: false,
-                    width: 1000,
-                    height: 1000
+                    margin: {
+                        t: 20, //top margin
+                        l: 20, //left margin
+                        r: 20, //right margin
+                        b: 20 //bottom margin
+                    }
                 }
             })
         })

@@ -7,10 +7,11 @@ const router = express.Router({strict: true})
 
 
 function xmur3(str) {
-    for(var i = 0, h = 1779033703 ^ str.length; i < str.length; i++) {
+    for (var i = 0, h = 1779033703 ^ str.length; i < str.length; i++) {
         h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
         h = h << 13 | h >>> 19;
-    } return function() {
+    }
+    return function () {
         h = Math.imul(h ^ (h >>> 16), 2246822507);
         h = Math.imul(h ^ (h >>> 13), 3266489909);
         return (h ^= h >>> 16) >>> 0;
@@ -18,7 +19,7 @@ function xmur3(str) {
 }
 
 function mulberry32(a) {
-    return function() {
+    return function () {
         let t = a += 0x6D2B79F5;
         t = Math.imul(t ^ t >>> 15, t | 1);
         t ^= t + Math.imul(t ^ t >>> 7, t | 61);
@@ -29,7 +30,7 @@ function mulberry32(a) {
 const seededRandom = ({rng = null, seed = "apples"} = {}) => {
     rng = rng || mulberry32(xmur3(seed)());
 
-    const rnd = (lo, hi, defaultHi=1) => {
+    const rnd = (lo, hi, defaultHi = 1) => {
         if (hi === undefined) {
             hi = lo === undefined ? defaultHi : lo;
             lo = 0;
@@ -51,8 +52,6 @@ const seededRandom = ({rng = null, seed = "apples"} = {}) => {
 
     return {rnd, rndInt, shuffle};
 };
-
-
 
 
 module.exports.router = router;

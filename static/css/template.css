@@ -7,55 +7,64 @@ body, h1, h2, h3, h4, h5, h6 {
     font-family: "Garamond", sans-serif;
     font-weight: 200;
 }
+
 h1 {
-    font-size:36px
+    font-size: 36px
 }
 
 /* Dropdown Button */
 .dropdown select {
-  background-color: #90bb23;
-  color: black;
-  padding: 16px;
-  margin: 16px;
-  font-size: 20px;
-  border: none;
-  font-family: "Garamond";
-  border-radius: 10px;
-  max-width: 240px;
+    background-color: #90bb23;
+    color: black;
+    padding: 16px;
+    margin: 16px;
+    font-size: 20px;
+    border: none;
+    font-family: "Garamond", serif;
+    border-radius: 10px;
+    max-width: 240px;
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover select {background-color: #3e8e41;}
+.dropdown:hover select {
+    background-color: #3e8e41;
+}
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
 
 /* Links inside the dropdown */
 .dropdown-content a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
 
-#overlay button:hover {background-color: #3e8e41;}
+#overlay button:hover {
+    background-color: #3e8e41;
+}
 
 #overlay button {
     background-color: #90bb23;
@@ -64,11 +73,13 @@ h1 {
     margin: 16px;
     font-size: 20px;
     border: none;
-    font-family: "Garamond";
+    font-family: "Garamond", serif;
     border-radius: 10px;
 }
 
-#filter_container button:hover {background-color: #3e8e41;}
+#filter_container button:hover {
+    background-color: #3e8e41;
+}
 
 #filter_container button {
     background-color: #90bb23;
@@ -77,40 +88,40 @@ h1 {
     margin: 16px;
     font-size: 20px;
     border: none;
-    font-family: "Garamond";
+    font-family: "Garamond", serif;
     border-radius: 10px;
 }
 
 #overlay {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 75%; /* Full width (cover the whole page) */
-  height: 75%; /* Full height (cover the whole page) */
-  top: 12.5%;
-  background-color: white; /* Black background with opacity */
-  cursor: pointer; /* Add a pointer on hover */
-  margin: 0px 180px;
-  border: 3px solid lightgray;
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 75%; /* Full width (cover the whole page) */
+    height: 75%; /* Full height (cover the whole page) */
+    top: 12.5%;
+    background-color: white; /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+    margin: 0 180px;
+    border: 3px solid lightgray;
     z-index: 100;
 }
 
 #filter_container {
-  position: fixed; /* Sit on top of the page content */
-  display: none; /* Hidden by default */
-  width: 75%; /* Full width (cover the whole page) */
-  height: 75%; /* Full height (cover the whole page) */
-  top: 12.5%;
-  background-color: white; /* Black background with opacity */
-  cursor: pointer; /* Add a pointer on hover */
-  margin: 0px 180px;
-  border: 3px solid lightgray;
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 75%; /* Full width (cover the whole page) */
+    height: 75%; /* Full height (cover the whole page) */
+    top: 12.5%;
+    background-color: white; /* Black background with opacity */
+    cursor: pointer; /* Add a pointer on hover */
+    margin: 0 180px;
+    border: 3px solid lightgray;
 }
 
 #overlay iframe {
     height: 82%;
     width: 96%;
-    margin-left:20px;
-    margin-right:20px;
+    margin-left: 20px;
+    margin-right: 20px;
     border: none;
 }
 
@@ -120,6 +131,7 @@ h1 {
     height: 72px;
     margin: 24px 16px;
 }
+
 .navbar a, .navbar img {
     padding: 12px 40px;
     text-decoration: none;
@@ -141,14 +153,13 @@ h1 {
     padding: 12px 40px;
     text-decoration: none;
     cursor: pointer;
-    height: 24;
     display: inline;
     vertical-align: middle;
     font-size: 12px;
     margin: 12px;
     border-style: solid;
     border-color: #07911e;
-    background-color:#e1fade;
+    background-color: #e1fade;
     border-radius: 10px;
     color: black;
 }
@@ -165,11 +176,12 @@ h1 {
 }
 
 .navbar a:hover {
-    color: #000!important;
-    background-color: #fff!important;
+    color: #000 !important;
+    background-color: #fff !important;
 }
+
 header {
-    text-align:center;
+    text-align: center;
     background-color: #86C5DA;
     padding: 116px 64px;
     margin: 24px 16px;
@@ -177,16 +189,20 @@ header {
 
 #data_table_container {
     margin: 24px 16px;
-    padding: 0px 64px;
-    height: 500px;
+    padding: 0 64px;
+    height: 80vh;
+    width: 80vw;
+    align-items: center;
 }
 
-.jumbo{
-    font-size:64px!important;
+.jumbo {
+    font-size: 64px !important;
 }
-.xlarge{
-    font-size:24px!important;
+
+.xlarge {
+    font-size: 24px !important;
 }
+
 body {
     background-image: url("https://www.mandyspizza.com/wp-content/uploads/2017/01/BACKGROUND-Light-Wood-Background.jpg");
 }
@@ -194,27 +210,30 @@ body {
 .visualized_table {
     margin-left: auto;
     margin-right: auto;
-    font-family: Montserrat;
+    font-family: Montserrat, serif;
 }
 
 .visualized_table td, #customers th {
     border: 1px solid #ddd;
     padding: 8px;
-    white-space:pre
+    white-space: pre
 }
 
-.visualized_table tr:nth-child(even){background-color: #f2f2f2;}
+.visualized_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-.visualized_table tr:nth-child(odd){background-color: #fff;}
+.visualized_table tr:nth-child(odd) {
+    background-color: #fff;
+}
 
 
-.visualized_table tr:hover {background-color: #ddd;}
+.visualized_table tr:hover {
+    background-color: #ddd;
+}
 
 .visualized_table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding: 12px 5px;
     text-align: left;
     background-color: #86C5DA;
     color: white;
