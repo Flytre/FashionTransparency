@@ -96,7 +96,8 @@
 
 <script>
     $("#compare").on('click', () => $("#overlay").fadeToggle(500))
-    $(".close-overlay").on('click', () => $("#overlay").fadeOut(500))
+    $("#close").on('click', () => $("#overlay").fadeOut(500))
+    $("#close2").on('click', () => $("#filter_container").fadeOut(500))
     $("#filter").on('click', () => $("#filter_container").fadeToggle(500))
 </script>
 
