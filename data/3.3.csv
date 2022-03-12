@@ -1,4 +1,4 @@
-Brand Name,Name of supplier (e.g. parent company),Name of specific facility or farm,Address,"Type of raw material, products or services",Approximate number of workers,Sex-disaggregated breakdown of workers,% or number of migrant or contract workers,List is publicly available as a csv or Excel spreadsheet in order to make this information easy to use for trade unions and NGOs ,Discloses what percentage of raw materials suppliers is published,Discloses supplier list that covers more than one raw material type,Publishes that this list or map of raw materials suppliers has been updated within the past 12 months,"Discloses whether the company is tracing the source/supplier of one or more specific raw materials (e.g. part of Leather Working Group or using Responsible Down/Wool Standard, Global Recycling Standard, Content Claim Standard, Organic Cotton Standard, GOTS, FAIRTRADE Certified Cotton Mark and Cotton Programme, Cotton Made in Africa HIP, Oeko-Tex SteP/Made in Green or company/parent group's own initiatives such as using blockchain or transaction certifications or DNA schemes.",Total Section 3.3
+Brand Name,Name of supplier (e.g. parent company),Name of specific facility or farm,Address,"Type of raw material, products or services",Approximate number of workers,Sex-disaggregated breakdown of workers,% or number of migrant or contract workers,List is publicly available as a csv or Excel spreadsheet in order to make this information easy to use for trade unions and NGOs,Discloses what percentage of raw materials suppliers is published,Discloses supplier list that covers more than one raw material type,Publishes that this list or map of raw materials suppliers has been updated within the past 12 months,"Discloses whether the company is tracing the source/supplier of one or more specific raw materials (e.g. part of Leather Working Group or using Responsible Down/Wool Standard, Global Recycling Standard, Content Claim Standard, Organic Cotton Standard, GOTS, FAIRTRADE Certified Cotton Mark and Cotton Programme, Cotton Made in Africa HIP, Oeko-Tex SteP/Made in Green or company/parent group's own initiatives such as using blockchain or transaction certifications or DNA schemes.",Total Section 3.3
 Abercrombie & Fitch,0,0,0,0,0,0,0,0,0,0,0,1,1
 Adidas,0,0,0,0,0,0,0,0,0,0,0,1,1
 Aeropostale,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -42,7 +42,7 @@ Canada Goose,0,0,0,0,0,0,0,0,0,0,0,1,1
 Carhartt,0,0,0,0,0,0,0,0,0,0,0,0,0
 Carolina Herrera,0,0,0,0,0,0,0,0,0,0,0,0,0
 CAROLL,0,0,0,0,0,0,0,0,0,0,0,0,0
-Carrefour ,0,0,0,0,0,0,0,0,0,0,0,1,1
+Carrefour,0,0,0,0,0,0,0,0,0,0,0,1,1
 Carter's,0,0,0,0,0,0,0,0,0,0,0,1,1
 CELINE,0,0,0,0,0,0,0,0,0,0,0,1,1
 celio,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -123,7 +123,7 @@ Kathmandu,0,0,0,0,0,0,0,0,0,0,0,1,1
 Kaufland,0,0,0,0,0,0,0,0,0,0,0,1,1
 Kiabi,0,0,0,0,0,0,0,0,0,0,0,0,0
 KiK,0,0,0,0,0,0,0,0,0,0,0,1,1
-Kmart ,0,0,0,0,0,0,0,0,0,0,0,0,0
+Kmart,0,0,0,0,0,0,0,0,0,0,0,0,0
 Kmart Australia,0,0,0,0,0,0,0,0,0,0,0,1,1
 Kohl's,0,0,0,0,0,0,0,0,0,0,0,1,1
 KOOVS,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -211,7 +211,7 @@ Target,0,0,0,0,0,0,0,0,0,0,0,1,1
 Target Australia,0,0,0,0,0,0,0,0,0,0,0,1,1
 Tchibo,0,0,0,0,0,0,0,0,0,0,0,1,1
 Ted Baker,0,0,0,0,0,0,0,0,0,0,0,1,1
-Tesco ,3,0,3,0,0,0,0,0,1,0,0,1,8
+Tesco,3,0,3,0,0,0,0,0,1,0,0,1,8
 Tezenis,0,0,0,0,0,0,0,0,0,0,0,0,0
 The Children's Place,0,0,0,0,0,0,0,0,0,0,0,0,0
 The North Face,3,3,3,2,2,1,0,3,0,1,1,1,20

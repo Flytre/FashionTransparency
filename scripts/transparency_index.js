@@ -136,7 +136,6 @@ router.get('/table_data', (req, res) => {
 router.get('/compare_chart', (req, res) => {
     const {brand_1, brand_2, category} = req.query;
 
-    let brand1Data, brand2Data;
     const customTable = []; //stores a custom table constructed using the given query parameters
 
     if (category === "" || category === undefined) {
@@ -144,19 +143,13 @@ router.get('/compare_chart', (req, res) => {
     }
 
     getData(data => {
-        let table = data[category];
 
-        //selects correct brands and corresponding data
-        for (const row_index in table) {
-            if (table[row_index]['Brand Name'] === brand_1) {
-                brand1Data = table[row_index];
-            } else if (table[row_index]['Brand Name'] === brand_2) {
-                brand2Data = table[row_index];
-            }
-        }
+        let brand1Data = data[category].find(e => e['Brand Name'] === brand_1)
+        let brand2Data = data[category].find(e => e['Brand Name'] === brand_2)
 
         if (brand1Data === undefined || brand2Data === undefined) {
             res.render("selection_error")
+            return;
         }
 
         let headers = Object.keys(brand1Data)
@@ -170,5 +163,142 @@ router.get('/compare_chart', (req, res) => {
         })
     })
 })
+
+
+router.get('/brand_data', (req, res) => {
+    const {brand} = req.query
+
+    if (brand === undefined) {
+        res.json({"error": "Undefined query parameter for field brand"})
+        return;
+    }
+
+    getData(data => {
+        let matchingBrands = data["total"].filter(e => e['Brand Name'] === brand)
+
+        if (matchingBrands.length === 0) {
+            res.json({"error": `No data for brand ${brand} could be found.`})
+            return;
+        }
+
+        let editedBrandData = JSON.parse(JSON.stringify(matchingBrands[0]));
+        delete editedBrandData['Brand Name']
+
+        colorInfuse(editedBrandData)
+
+        res.render("brand_data_popup", {"brand_data": editedBrandData, "brand": brand});
+    })
+})
+
+function colorInfuse(object) {
+    let colors = ["#F6000088", "#FF8C0088", "#d600bd88", "#4DE94C88", "#3783FF88", "#4815AA88", "#03dbfc88"]
+
+    {
+        let index = 0
+        for (let key in object) {
+            object[key] = {
+                "value": object[key],
+                "color": colors[index++ % colors.length]
+            }
+        }
+    }
+}
+
+
+router.get('/brand_section_info', (req, res) => {
+    const {brand, section} = req.query
+
+    if (section === undefined || brand === undefined) {
+        res.json({"error": "Missing query parameters"})
+        return
+    }
+
+    getData(data => {
+
+        let sectionInfo = totalToSection(section, data);
+
+        if (sectionInfo === undefined) {
+            res.json({"error": "Unknown section for identifier " + section})
+            return
+        }
+
+        let tableNames = []
+
+        { //example tableNames value: [ '1.1', '1.4', '1.3', '1.2', '1.5' ]
+            for (let table in data) {
+                if (sectionInfo.exact === true) {
+                    if (table === sectionInfo.val)
+                        tableNames.push(table)
+                } else if (table.startsWith(sectionInfo.val))
+                    tableNames.push(table)
+            }
+        }
+
+        let brandData = {}
+
+        //set brand subtotal values
+        if (sectionInfo.lastOnly === true) {
+            for (let index in tableNames) {
+                let tableName = tableNames[index]
+                let table = data[tableName];
+                let headers = Object.keys(table[0]);
+                let subtotalKey = headers[headers.length - 1]
+                let brandRow = getRowOfTableAboutBrand(table, brand, res);
+                brandData[subtotalKey] = brandRow[subtotalKey]
+            }
+        } else {
+            for (let index in tableNames) {
+                let tableName = tableNames[index]
+                let table = data[tableName];
+                let headers = Object.keys(table[0]).filter(header => header !== "Brand Name");
+                for (let headerIndex in headers) {
+                    let header = headers[headerIndex];
+                    let brandRow = getRowOfTableAboutBrand(table, brand, res);
+                    brandData[header] = brandRow[header]
+                }
+            }
+        }
+
+        colorInfuse(brandData)
+        res.render("brand_data_popup", {"brand_data": brandData, "brand": brand});
+
+    })
+})
+
+function getRowOfTableAboutBrand(table, brand, res) {
+    let brandRows = table.filter(element => element['Brand Name'] === brand)
+    if (brandRows.length === 0) {
+        res.json({"error": "Invalid Brand " + brand})
+        return;
+    }
+    return brandRows[0]
+}
+
+function totalToSection(section, data) {
+    switch (section) {
+        case "Total Score Section 1":
+            return {val: "1", lastOnly: true, exact: false}
+        case "Total Score Section 2":
+            return {val: "2", lastOnly: true, exact: false}
+        case "Total Score Section 3":
+            return {val: "3", lastOnly: true, exact: false}
+        case "Total Score Section 4":
+            return {val: "4", lastOnly: true, exact: false}
+        case "Total Score Section 5":
+            return {val: "5", lastOnly: true, exact: false}
+    }
+
+    for (let key in data) {
+        let table = data[key];
+        let headers = Object.keys(table[0]);
+        let lastHeader = headers[headers.length - 1]
+        if (lastHeader === section) {
+            return {val: key, lastOnly: false, exact: true}
+        }
+    }
+
+
+    return undefined
+}
 
 module.exports = router;

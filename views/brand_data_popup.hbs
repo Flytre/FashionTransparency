@@ -1,0 +1,14 @@
+<div class="popup_header">
+    <h3>{{brand}}</h3>
+</div>
+<div id="brand_totals_display">
+    {{#each brand_data}}
+        <div class="section_total" style="background-color: {{this.color}}"
+             onclick="onClickSectionTotal(`{{../brand}}`,`{{@key}}`)">
+            {{@key}}:
+            <div>
+                <span class="bigger_font">{{this.value}}</span>
+            </div>
+        </div>
+    {{/each}}
+</div>

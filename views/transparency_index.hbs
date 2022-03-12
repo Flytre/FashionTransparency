@@ -47,7 +47,7 @@
     </form>
 </div>
 
-<div id="overlay">
+<div id="overlay" class="overlay">
     <form action="./compare_chart" target="results">
         <div class="dropdown">
             <select name="brand_1" id="id_brand_1">
@@ -78,7 +78,9 @@
     </form>
     <iframe name="results"></iframe>
 </div>
-<div id="filter_container">
+
+
+<div id="filter_overlay" class="overlay">
     <form action="./update_chart" target="data_table_container">
         <div class="dropdown">
             <select name="requirement" id="id_requirement">
@@ -87,18 +89,35 @@
                     <option value="{{@key}}">{{@key}}</option>
                 {{/each}}
             </select>
-            {{!--Choose multiple requirements, min score in section, max score in section--}}
         </div>
         <button type="submit" value="Submit">Apply</button>
         <button type="button" id="close2" class="close-overlay">Close</button>
     </form>
 </div>
 
+<div id="brand_info_overlay" class="overlay">
+    <div class="right-align">
+        <button type="button" class="close-overlay">X</button>
+    </div>
+    <div id="brand_info_overlay_inner">
+
+    </div>
+</div>
+
 <script>
-    $("#compare").on('click', () => $("#overlay").fadeToggle(500))
-    $("#close").on('click', () => $("#overlay").fadeOut(500))
-    $("#close2").on('click', () => $("#filter_container").fadeOut(500))
-    $("#filter").on('click', () => $("#filter_container").fadeToggle(500))
+
+    function toggleFades(element) {
+        if (element.is(":visible")) {
+            element.fadeOut(500)
+        } else {
+            $(".overlay").fadeOut(500)
+            element.fadeIn(500)
+        }
+    }
+
+    $("#compare").on('click', () => toggleFades($("#overlay")))
+    $(".close-overlay").on('click', () => $(".overlay").fadeOut(500))
+    $("#filter").on('click', () => toggleFades($("#filter_overlay")))
 </script>
 
 <div id="data_table_container">
@@ -109,7 +128,7 @@
     Plotly.newPlot("data_table_container", {{{graph}}});
 
     document.getElementById('data_table_container').on('plotly_click', data => {
-        let brand = '';
+        let brand;
 
         //last index should have the 'nearest' point
         //data.points only contains points overlapping with the cursor, not all points
@@ -118,8 +137,27 @@
 
         brand = customData[pointData.text].brand
 
-        alert('Display Popup with information on:\n\n' + brand);
+        $.get(`./brand_data?brand=${encodeURIComponent(brand)}`, (data) => {
+            let html = $.parseHTML(data)
+            $("#brand_info_overlay_inner").html(html)
+            $("#brand_info_overlay").fadeIn(500)
+        })
     });
+</script>
+
+<script>
+    function onClickSectionTotal(brand, section) {
+
+        $.get(`./brand_section_info?brand=${encodeURIComponent(brand)}&section=${encodeURIComponent(section)}`, data => {
+
+            if(typeof data === 'object') {
+                return;
+            }
+
+            let html = $.parseHTML(data)
+            $("#brand_info_overlay_inner").html(html)
+        })
+    }
 </script>
 
 </body>
