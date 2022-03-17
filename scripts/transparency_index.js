@@ -18,7 +18,7 @@ function randomColor(rndInt) {
 router.get('/transparency_index', (req, res) => {
     //if the parameter is undefined, it defaults to total
     let tableName = req.query.table || "total";
-
+    
     getData(data => {
 
         let xAxis = []; //stores the x value for each brand
@@ -27,6 +27,8 @@ router.get('/transparency_index', (req, res) => {
         let colors = []; //stores the color of each bubble
         let table = data[tableName];
         let names = [];
+        let border_width = [];
+        let border_color = [];
         let customData = {};
         let graphTitle = "Total Points";
 
@@ -37,7 +39,18 @@ router.get('/transparency_index', (req, res) => {
             }).reduce((currentMax, contender) => {
                 return parseInt(currentMax) > parseInt(contender) ? currentMax : contender //reduce to the max score
             }))
-
+        let{q, requirements, min, max} = req.query;
+        if (min === undefined || min === "") {
+            min = 0
+        }
+        if (max === undefined || max === "") {
+            max = maxPoints
+        }
+        if (requirements === undefined) {
+            requirements = []
+        } else if (!Array.isArray(requirements) && requirements.includes('"')){
+            requirements = JSON.parse(requirements)
+        }
         //fill the above arrays
         for (const rowIndex in table) {
 
@@ -49,18 +62,41 @@ router.get('/transparency_index', (req, res) => {
             //that means if the same seed is passed in the same sequence of random values will always follow
             //this allows the positions of all the dots to be arbitrary but not change
             const {rnd, rndInt} = seededRandom({seed: "" + row['Brand Name']});
-
-
-            xAxis.push(rnd(0, 100))
-            yAxis.push(rnd(0, 100))
-
-            let displayName = row['Brand Name'] + '<br>Transparency Rating: ' + score;
-
-            names.push(displayName)
-            bubbleSize.push(((score / maxPoints) * 100) + 20)  //scale bubble size
-            colors.push(randomColor(rndInt))
-            customData[displayName] = {
-                "brand": row['Brand Name']
+            
+            let acceptable = true
+            
+            if (parseFloat(score) >= min && parseFloat(score) <= max) {
+                
+                if (Array.isArray(requirements)) {
+                    for (const header in requirements) {
+                        if (parseFloat(row[requirements[header]]) === 0.0) {
+                            acceptable = false
+                        }
+                    }
+                } else if (parseFloat(row[requirements]) === 0.0) {
+                    acceptable = false
+                }
+                
+                if (acceptable) {
+                    xAxis.push(rnd(0, 100))
+                    yAxis.push(rnd(0, 100))
+        
+                    let displayName = row['Brand Name'] + '<br>Transparency Rating: ' + score;
+        
+                    names.push(displayName)
+                    bubbleSize.push(((score / maxPoints) * 100) + 20)  //scale bubble size
+                    colors.push(randomColor(rndInt))
+                    if (row['Brand Name'] === q) {
+                        border_width.push(5)
+                        border_color.push('red')
+                    } else {
+                        border_width.push(0)
+                        border_color.push('white')
+                    }
+                    customData[displayName] = {
+                        "brand": row['Brand Name']
+                    }
+                }
             }
         }
 
@@ -68,15 +104,21 @@ router.get('/transparency_index', (req, res) => {
         if (tableName !== "total") {
             for (const rowIndex in data["section_to_name"]) {
                 if (data["section_to_name"][rowIndex]['Section'] === tableName) {
-                    graphTitle = data["section_to_name"][rowIndex];
+                    graphTitle = data["section_to_name"][rowIndex]['Title'];
                 }
             }
-            graphTitle = data["section_to_name"]
+            //graphTitle = data["section_to_name"]
         }
 
         res.render("transparency_index", {
-            "data": data["total"],
+            "data": data[tableName],
             "section_name": data["section_to_name"],
+            "max" : max,
+            "min" : min,
+            "q": q,
+            "requirements" : JSON.stringify(requirements),
+            "table": tableName,
+            "title": graphTitle,
             "graph": JSON.stringify({
                 "data": [{
                     x: xAxis,
@@ -85,7 +127,11 @@ router.get('/transparency_index', (req, res) => {
                     text: names,
                     marker: {
                         size: bubbleSize,
-                        color: colors
+                        color: colors,
+                        line: {
+                            color: border_color,
+                            width: border_width
+                        }
                     },
                     customData: customData //custom property so we can access brand names on the client
                 }],
@@ -108,7 +154,7 @@ router.get('/transparency_index', (req, res) => {
 
                     },
                     margin: {
-                        t: 20, //top margin
+                        t: 35, //top margin
                         l: 20, //left margin
                         r: 20, //right margin
                         b: 20 //bottom margin
@@ -141,33 +187,36 @@ router.get('/compare_chart', (req, res) => {
     if (category === "" || category === undefined) {
         res.render("selection_error")
     }
+    
+    else {
+        getData(data => {
 
-    getData(data => {
-
-        let brand1Data = data[category].find(e => e['Brand Name'] === brand_1)
-        let brand2Data = data[category].find(e => e['Brand Name'] === brand_2)
-
-        if (brand1Data === undefined || brand2Data === undefined) {
-            res.render("selection_error")
-            return;
-        }
-
-        let headers = Object.keys(brand1Data)
-
-        headers.forEach(header => {
-            customTable.push([header, brand1Data[header], brand2Data[header]])
+            let brand1Data = data[category].find(e => e['Brand Name'] === brand_1)
+            let brand2Data = data[category].find(e => e['Brand Name'] === brand_2)
+    
+            if (brand1Data === undefined || brand2Data === undefined) {
+                res.render("selection_error")
+                return;
+            }
+    
+            let headers = Object.keys(brand1Data)
+    
+            headers.forEach(header => {
+                customTable.push([header, brand1Data[header], brand2Data[header]])
+            })
+    
+            res.render("compare_table", {
+                "data": customTable
+            })
         })
+    }
 
-        res.render("compare_table", {
-            "data": customTable
-        })
-    })
 })
 
 
 router.get('/brand_data', (req, res) => {
     const {brand} = req.query
-
+    
     if (brand === undefined) {
         res.json({"error": "Undefined query parameter for field brand"})
         return;

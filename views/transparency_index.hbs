@@ -22,16 +22,17 @@
     <a href="test">Test</a>
 </div>
 
+<form id="helper" style="display: none;" action="./transparency_index">
+    <input name="q" value="{{q}}" style="display:none;">
+</form>
 <div class="tool_bar">
     <form id="data_search">
         <div class="dropdown">
-            <button class="tool_bar_item" style="width: 200px; border-width: 2px; text-overflow: ellipsis;">Select
-                Category
-            </button>
+            <button form="helper" name="table" class="tool_bar_item" style="width: 200px; border-width: 2px; overflow: auto; height: 44px!important;" value={{table}}>{{title}}</button>
             <div class="dropdown-content">
+                <button form="helper" name="table" value="total">Total Points</button>
                 {{#each section_name}}
-                    <button onclick="changeChart(" +{{this.[Section]}}+
-                    ")">{{this.[Title]}}</button>
+                    <button form="helper" name="table" value="{{this.[Section]}}">{{this.[Title]}}</button>
                 {{/each}}
             </div>
         </div>
@@ -44,6 +45,11 @@
                 <path d="m4.8495 7.8226c0.82666 0 1.5262-0.29146 2.0985-0.87438 0.57232-0.58292 0.86378-1.2877 0.87438-2.1144 0.010599-0.82666-0.28086-1.5262-0.87438-2.0985-0.59352-0.57232-1.293-0.86378-2.0985-0.87438-0.8055-0.010599-1.5103 0.28086-2.1144 0.87438-0.60414 0.59352-0.8956 1.293-0.87438 2.0985 0.021197 0.8055 0.31266 1.5103 0.87438 2.1144 0.56172 0.60414 1.2665 0.8956 2.1144 0.87438zm4.4695 0.2115 3.681 3.6819-1.259 1.284-3.6817-3.7 0.0019784-0.69479-0.090043-0.098846c-0.87973 0.76087-1.92 1.1413-3.1207 1.1413-1.3553 0-2.5025-0.46363-3.4417-1.3909s-1.4088-2.0686-1.4088-3.4239c0-1.3553 0.4696-2.4966 1.4088-3.4239 0.9392-0.92727 2.0864-1.3969 3.4417-1.4088 1.3553-0.011889 2.4906 0.45771 3.406 1.4088 0.9154 0.95107 1.379 2.0924 1.3909 3.4239 0 1.2126-0.38043 2.2588-1.1413 3.1385l0.098834 0.090049z"></path>
             </svg>
         </button>
+        <button class="tool_bar_item" type="button" id="about" style="float:right!important;">About</button>
+        <input name="table" value="{{table}}" style="display:none;">
+        <input name="min" value="{{min}}" style="display:none;">
+        <input name="max" value="{{max}}" style="display:none;">
+        <input name="requirements" value="{{requirements}}" style="display:none;">
     </form>
 </div>
 
@@ -74,24 +80,37 @@
             </select>
         </div>
         <button type="submit" value="Submit">Compare</button>
-        <button type="button" id="close" class="close-overlay">Close</button>
+        <div class="right-align">
+            <button type="button" class="close-overlay">X</button>
+        </div>
     </form>
     <iframe name="results"></iframe>
 </div>
 
 
 <div id="filter_overlay" class="overlay">
-    <form action="./update_chart" target="data_table_container">
-        <div class="dropdown">
-            <select name="requirement" id="id_requirement">
-                <option value="">Select Requirements</option>
-                {{#each data.[0]}}
-                    <option value="{{@key}}">{{@key}}</option>
-                {{/each}}
-            </select>
+    <form action="./transparency_index">
+        <div class="right-align">
+            <button type="button" class="close-overlay">X</button>
         </div>
-        <button type="submit" value="Submit">Apply</button>
-        <button type="button" id="close2" class="close-overlay">Close</button>
+        <div class="dropdown" style="margin-top: 32px;">
+            <label class="label">Select Requirements</label><br><br>
+                {{#each data.[0]}}
+                    <input type="checkbox" name="requirements" value="{{@key}}" id="id_"+"{{@key}}">
+                    <label for="id_"+"{{@key}}">{{@key}}</label><br>
+                {{/each}}
+        </div>
+        <div class="input" style="right:40%;">
+            <label class="label">Minimum Score</label>
+            <input type="text" name="min" placeholder={{min}}></input>
+        </div>
+        <div class="input" style="right: 20%;">
+            <label class="label">Maximum Score</label>
+            <input type="text" name="max" placeholder="{{max}}"></input>
+        </div>
+        <input name="table" value="{{table}}" style="display:none;">
+        <input name="q" value="{{q}}" style="display:none;">
+        <button type="submit" value="Submit" style="position: absolute; top: 0%; right:10%">Apply</button>
     </form>
 </div>
 
@@ -104,20 +123,56 @@
     </div>
 </div>
 
+<div id="about_overlay" class="overlay">
+    <div class="right-align">
+        <button type="button" class="close-overlay">X</button>
+    </div>
+    <p>The Transparency Index displays data released by FashionRevolution in 2021 on 250 of the 
+    world’s largest fashion brands and retailers. Brands were selected on the following basis:</P>
+    <ul>
+        <li>Annual Turnover over $400 million</li>
+        <li>Representative of the spread of the fashion industry including luxury, sportswear, denim, streetwear, accessories etc.</li>
+    </ul>
+    <p>Brands were measured on their public disclosure on human rights and environmental issues. The 
+    transparency index does not evaluate impact of policies and does not verify claims made by 
+    brands. The index simply measures how much and what information brands share with the public.
+    <br>
+    Brands were scored in five major categories:</p>
+    <ol>
+        <li>Policies and Commitments</li>
+        <li>Governance</li>
+        <li>Supply Chain Traceability</li>
+        <li>Know, Show, & Fix</li>
+        <li>Spotlight Issues</li>
+    </ol>
+    <p>Across the 5 categories, 239 subsections were reviewed. A brand received points if they 
+    disclosed information/data on the specific indicator. Each section and each indicator within 
+    sections are weighted corresponding to their relative importance.</p>
+    <ul>
+        <li>Section 1: 33/250</li>
+        <li>Section 2: 13/250</li>
+        <li>Section 3: 74/250</li>
+        <li>Section 4: 47/250</li>
+        <li>Section 5: 83/250</li>
+    </ul>
+    <p>The total transparency rating is calculated by summing a brand's points for each indicator for every section.</p>
+</div>
+
 <script>
 
     function toggleFades(element) {
         if (element.is(":visible")) {
-            element.fadeOut(500)
+            element.fadeOut(750)
         } else {
-            $(".overlay").fadeOut(500)
-            element.fadeIn(500)
+            $(".overlay").fadeOut(750)
+            element.fadeIn(750)
         }
     }
 
     $("#compare").on('click', () => toggleFades($("#overlay")))
-    $(".close-overlay").on('click', () => $(".overlay").fadeOut(500))
+    $(".close-overlay").on('click', () => $(".overlay").fadeOut(750))
     $("#filter").on('click', () => toggleFades($("#filter_overlay")))
+    $("#about").on('click', () => toggleFades($("#about_overlay")))
 </script>
 
 <div id="data_table_container">
@@ -140,7 +195,7 @@
         $.get(`./brand_data?brand=${encodeURIComponent(brand)}`, (data) => {
             let html = $.parseHTML(data)
             $("#brand_info_overlay_inner").html(html)
-            $("#brand_info_overlay").fadeIn(500)
+            $("#brand_info_overlay").fadeIn(750)
         })
     });
 </script>

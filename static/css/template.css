@@ -12,7 +12,45 @@ h1 {
     font-size: 36px
 }
 
-/* Dropdown Button */
+.input input {
+    margin: 20px;
+    padding: 4px;
+    font-size: 12px;
+    width: 135px;
+}
+
+.input {
+    display: inline-block;
+    width: 20%;
+    position: absolute; 
+    top: 0px; 
+    margin-top: 32px;
+}
+
+.label {
+    background-color: #90bb23;
+    color: black;
+    padding: 16px;
+    margin: 16px;
+    font-size: 20px;
+    border: none;
+    font-family: "Garamond", serif;
+    border-radius: 10px;
+    max-width: 240px;
+}
+
+.dropdown input {
+    background-color: #90bb23;
+    color: black;
+    padding: 16px;
+    margin: 16px;
+    font-size: 20px;
+    border: none;
+    font-family: "Garamond", serif;
+    border-radius: 10px;
+    max-width: 240px;
+}
+
 .dropdown select {
     background-color: #90bb23;
     color: black;
@@ -40,20 +78,23 @@ h1 {
     display: none;
     position: absolute;
     background-color: #f1f1f1;
-    min-width: 160px;
+    width: 224px;
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    height: 650px;
+    overflow: auto;
     z-index: 1;
 }
 
 /* Links inside the dropdown */
-.dropdown-content a {
+.dropdown-content button {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    width: inherit;
 }
 
-.dropdown-content a:hover {
+.dropdown-content button:hover {
     background-color: #ddd;
 }
 
@@ -90,6 +131,21 @@ h1 {
     border-radius: 2vh;
     z-index: 100;
     overflow-y:auto;
+}
+
+.overlay p {
+    margin: 12px;
+    font-size: 20px;
+}
+
+.overlay ul {
+    margin: 12px;
+    font-size: 20px;
+}
+
+.overlay ol {
+    margin: 12px;
+    font-size: 20px;
 }
 
 .overlay iframe {
