@@ -1,5 +1,4 @@
 const express = require('express');
-const https = require("https");
 const router = express.Router({strict: true})
 
 
@@ -11,8 +10,16 @@ function createColor(red, green, blue) {
     return `rgb(${red},${green},${blue},0.5)`
 }
 
-function randomColor(rndInt) {
-    return createColor(0, rndInt(64, 192), rndInt(64, 192))
+function randomColor(percent) {
+
+    function hsv2rgb(h, s, v) {
+        let f = (n, k = (n + h / 60) % 6) => v - v * s * Math.max(Math.min(k, 4 - k, 1), 0);
+        return [f(5), f(3), f(1)];
+    }
+
+    let rgb = hsv2rgb(percent * (225 - 135) + 135, 0.9, 0.5)
+
+    return createColor(rgb[0] * 256, rgb[1] * 256, rgb[2] * 256)
 }
 
 router.get('/transparency_graph', (req, res) => {
@@ -31,6 +38,7 @@ router.get('/transparency_graph', (req, res) => {
         let border_color = [];
         let customData = {};
         let graphTitle = "Total Points";
+        let annotations = [];
 
         let maxPoints = parseInt( //the maximum score any brand has
             table.map(brand => {
@@ -39,8 +47,7 @@ router.get('/transparency_graph', (req, res) => {
             }).reduce((currentMax, contender) => {
                 return parseInt(currentMax) > parseInt(contender) ? currentMax : contender //reduce to the max score
             }))
-        let{q, requirements, min, max} = req.query;
-        console.log(requirements)
+        let {q, requirements, min, max} = req.query;
         if (min === undefined || min === "") {
             min = 0
         }
@@ -49,7 +56,7 @@ router.get('/transparency_graph', (req, res) => {
         }
         if (requirements === undefined) {
             requirements = []
-        } else if (!Array.isArray(requirements) && requirements.includes('"')){
+        } else if (!Array.isArray(requirements) && requirements.includes('"')) {
             requirements = JSON.parse(requirements)
         }
         //fill the above arrays
@@ -86,8 +93,8 @@ router.get('/transparency_graph', (req, res) => {
 
                     names.push(displayName)
                     bubbleSize.push(((score / maxPoints) * 100) + 20)  //scale bubble size
-                    colors.push(randomColor(rndInt))
-                    if (q!== undefined && removePunctuation(row['Brand Name']).toLowerCase() === q.toLowerCase()) {
+                    colors.push(randomColor(rnd(0, 1)))
+                    if (q !== undefined && removePunctuation(row['Brand Name']).toLowerCase() === q.toLowerCase()) {
                         border_width.push(5)
                         border_color.push('red')
                     } else {
@@ -97,6 +104,20 @@ router.get('/transparency_graph', (req, res) => {
                     customData[displayName] = {
                         "brand": row['Brand Name']
                     }
+                    annotations.push({
+                        x: xAxis[xAxis.length - 1],
+                        y: yAxis[yAxis.length - 1],
+                        xref: 'x',
+                        yref: 'y',
+                        text: row['Brand Name'],
+                        xanchor: 'center',
+                        yanchor: 'middle',
+                        showarrow: false,
+                        font: {
+                            color: '#bababa',
+                            size: Math.max(8, Math.floor((bubbleSize[bubbleSize.length - 1] / row['Brand Name'].length) * 1.25))
+                        }
+                    })
                 }
             }
         }
@@ -112,56 +133,56 @@ router.get('/transparency_graph', (req, res) => {
         }
 
         res.json({
-                "data": [{
-                    x: xAxis,
-                    y: yAxis,
-                    mode: 'markers',
-                    text: names,
-                    marker: {
-                        size: bubbleSize,
-                        color: colors,
-                        line: {
-                            color: border_color,
-                            width: border_width
-                        }
-                    },
-                    customData: customData //custom property so we can access brand names on the client
-                }],
-                "layout": {
-                    title: graphTitle,
-                    showlegend: false,
-                    paper_bgcolor: 'rgba(0,0,0,0)',
-                    plot_bgcolor: 'rgba(0,0,0,0)',
-                    xaxis: {
-                        showgrid: false,
-                        automargin: true,
-                        zeroline: false,
-                        visible: false
-                    },
-                    yaxis: {
-                        showgrid: false,
-                        automargin: true,
-                        zeroline: false,
-                        visible: false
-
-                    },
-                    margin: {
-                        t: 35, //top margin
-                        l: 20, //left margin
-                        r: 20, //right margin
-                        b: 20 //bottom margin
+            "data": [{
+                x: xAxis,
+                y: yAxis,
+                mode: 'markers',
+                text: names,
+                marker: {
+                    size: bubbleSize,
+                    color: colors,
+                    line: {
+                        color: border_color,
+                        width: border_width
                     }
-                }
-            })
-})
-})
+                },
+                customData: customData //custom property so we can access brand names on the client
+            }],
+            "layout": {
+                title: graphTitle,
+                showlegend: false,
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                xaxis: {
+                    showgrid: false,
+                    automargin: true,
+                    zeroline: false,
+                    visible: false
+                },
+                yaxis: {
+                    showgrid: false,
+                    automargin: true,
+                    zeroline: false,
+                    visible: false
 
+                },
+                margin: {
+                    t: 35, //top margin
+                    l: 20, //left margin
+                    r: 20, //right margin
+                    b: 20 //bottom margin
+                },
+                annotations: annotations
+            }
+        })
+    })
+})
 
 
 router.get('/transparency_index', (req, res) => {
     //if the parameter is undefined, it defaults to total
     let tableName = req.query.table || "total";
-    
+
     getData(data => {
 
         let table = data[tableName];
@@ -187,8 +208,8 @@ router.get('/transparency_index', (req, res) => {
         res.render("transparency_index", {
             "data": data[tableName],
             "section_name": data["section_to_name"],
-            "max" : maxPoints,
-            "min" : 0,
+            "max": maxPoints,
+            "min": 0,
             "table": tableName,
             "title": graphTitle
         })
@@ -217,25 +238,23 @@ router.get('/compare_chart', (req, res) => {
 
     if (category === "" || category === undefined) {
         res.render("selection_error")
-    }
-    
-    else {
+    } else {
         getData(data => {
 
             let brand1Data = data[category].find(e => e['Brand Name'] === brand_1)
             let brand2Data = data[category].find(e => e['Brand Name'] === brand_2)
-    
+
             if (brand1Data === undefined || brand2Data === undefined) {
                 res.render("selection_error")
                 return;
             }
-    
+
             let headers = Object.keys(brand1Data)
-    
+
             headers.forEach(header => {
                 customTable.push([header, brand1Data[header], brand2Data[header]])
             })
-    
+
             res.render("compare_table", {
                 "data": customTable
             })
@@ -247,7 +266,7 @@ router.get('/compare_chart', (req, res) => {
 
 router.get('/brand_data', (req, res) => {
     const {brand} = req.query
-    
+
     if (brand === undefined) {
         res.json({"error": "Undefined query parameter for field brand"})
         return;
@@ -384,12 +403,12 @@ function totalToSection(section, data) {
 const punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
 
 function removePunctuation(string) {
-  return string
-    .split('')
-    .filter(function(letter) {
-      return punctuation.indexOf(letter) === -1;
-    })
-    .join('');
+    return string
+        .split('')
+        .filter(function (letter) {
+            return punctuation.indexOf(letter) === -1;
+        })
+        .join('');
 }
 
 module.exports = router;
