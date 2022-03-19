@@ -15,10 +15,10 @@ function randomColor(rndInt) {
     return createColor(0, rndInt(64, 192), rndInt(64, 192))
 }
 
-router.get('/transparency_index', (req, res) => {
+router.get('/transparency_graph', (req, res) => {
     //if the parameter is undefined, it defaults to total
     let tableName = req.query.table || "total";
-    
+
     getData(data => {
 
         let xAxis = []; //stores the x value for each brand
@@ -40,6 +40,7 @@ router.get('/transparency_index', (req, res) => {
                 return parseInt(currentMax) > parseInt(contender) ? currentMax : contender //reduce to the max score
             }))
         let{q, requirements, min, max} = req.query;
+        console.log(requirements)
         if (min === undefined || min === "") {
             min = 0
         }
@@ -62,11 +63,11 @@ router.get('/transparency_index', (req, res) => {
             //that means if the same seed is passed in the same sequence of random values will always follow
             //this allows the positions of all the dots to be arbitrary but not change
             const {rnd, rndInt} = seededRandom({seed: "" + row['Brand Name']});
-            
+
             let acceptable = true
-            
+
             if (parseFloat(score) >= min && parseFloat(score) <= max) {
-                
+
                 if (Array.isArray(requirements)) {
                     for (const header in requirements) {
                         if (parseFloat(row[requirements[header]]) === 0.0) {
@@ -76,17 +77,17 @@ router.get('/transparency_index', (req, res) => {
                 } else if (parseFloat(row[requirements]) === 0.0) {
                     acceptable = false
                 }
-                
+
                 if (acceptable) {
                     xAxis.push(rnd(0, 100))
                     yAxis.push(rnd(0, 100))
-        
+
                     let displayName = row['Brand Name'] + '<br>Transparency Rating: ' + score;
-        
+
                     names.push(displayName)
                     bubbleSize.push(((score / maxPoints) * 100) + 20)  //scale bubble size
                     colors.push(randomColor(rndInt))
-                    if (row['Brand Name'] === q) {
+                    if (q!== undefined && removePunctuation(row['Brand Name']).toLowerCase() === q.toLowerCase()) {
                         border_width.push(5)
                         border_color.push('red')
                     } else {
@@ -110,16 +111,7 @@ router.get('/transparency_index', (req, res) => {
             //graphTitle = data["section_to_name"]
         }
 
-        res.render("transparency_index", {
-            "data": data[tableName],
-            "section_name": data["section_to_name"],
-            "max" : max,
-            "min" : min,
-            "q": q,
-            "requirements" : JSON.stringify(requirements),
-            "table": tableName,
-            "title": graphTitle,
-            "graph": JSON.stringify({
+        res.json({
                 "data": [{
                     x: xAxis,
                     y: yAxis,
@@ -161,9 +153,48 @@ router.get('/transparency_index', (req, res) => {
                     }
                 }
             })
+})
+})
+
+
+
+router.get('/transparency_index', (req, res) => {
+    //if the parameter is undefined, it defaults to total
+    let tableName = req.query.table || "total";
+    
+    getData(data => {
+
+        let table = data[tableName];
+        let graphTitle = "Total Points";
+
+        let maxPoints = parseInt( //the maximum score any brand has
+            table.map(brand => {
+                let headers = Object.keys(brand);
+                return brand[headers[headers.length - 1]] //get the total score of the brand
+            }).reduce((currentMax, contender) => {
+                return parseInt(currentMax) > parseInt(contender) ? currentMax : contender //reduce to the max score
+            }))
+
+        //set the graph title
+        if (tableName !== "total") {
+            for (const rowIndex in data["section_to_name"]) {
+                if (data["section_to_name"][rowIndex]['Section'] === tableName) {
+                    graphTitle = data["section_to_name"][rowIndex]['Title'];
+                }
+            }
+        }
+
+        res.render("transparency_index", {
+            "data": data[tableName],
+            "section_name": data["section_to_name"],
+            "max" : maxPoints,
+            "min" : 0,
+            "table": tableName,
+            "title": graphTitle
         })
     })
 })
+
 
 router.get('/table_data', (req, res) => {
     let table = req.query.table;
@@ -348,6 +379,17 @@ function totalToSection(section, data) {
 
 
     return undefined
+}
+
+const punctuation = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+
+function removePunctuation(string) {
+  return string
+    .split('')
+    .filter(function(letter) {
+      return punctuation.indexOf(letter) === -1;
+    })
+    .join('');
 }
 
 module.exports = router;

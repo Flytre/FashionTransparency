@@ -220,10 +220,9 @@ header {
 
 #data_table_container {
     margin: 24px 16px;
-    padding: 0 64px;
     height: 80vh;
-    width: 80vw;
     align-items: center;
+    overflow-x: auto;
 }
 
 .jumbo {
@@ -268,6 +267,36 @@ body {
     text-align: left;
     background-color: #86C5DA;
     color: white;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.visualized_table .th-sort-asc::after {
+  content: "\25b4";
+}
+
+.visualized_table .th-sort-desc::after {
+  content: "\25be";
+}
+
+.visualized_table .th-sort-asc::after,
+.visualized_table .th-sort-desc::after {
+  margin-left: 5px;
+}
+
+.visualized_table .th-sort-asc,
+.visualized_table .th-sort-desc {
+  background: royalblue;
+}
+
+.visualized_table a {
+    text-decoration: none;
+    color: black;
+}
+
+.visualized_table a:hover {
+    color: blue;
+    text-decoration: underline;
 }
 
 #brand_totals_display {

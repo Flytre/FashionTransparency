@@ -26,7 +26,6 @@
     <input name="q" value="{{q}}" style="display:none;">
 </form>
 <div class="tool_bar">
-    <form id="data_search">
         <div class="dropdown">
             <button form="helper" name="table" class="tool_bar_item" style="width: 200px; border-width: 2px; overflow: auto; height: 44px!important;" value={{table}}>{{title}}</button>
             <div class="dropdown-content">
@@ -50,7 +49,6 @@
         <input name="min" value="{{min}}" style="display:none;">
         <input name="max" value="{{max}}" style="display:none;">
         <input name="requirements" value="{{requirements}}" style="display:none;">
-    </form>
 </div>
 
 <div id="overlay" class="overlay">
@@ -89,11 +87,10 @@
 
 
 <div id="filter_overlay" class="overlay">
-    <form action="./transparency_index">
         <div class="right-align">
             <button type="button" class="close-overlay">X</button>
         </div>
-        <div class="dropdown" style="margin-top: 32px;">
+        <div class="dropdown" id='checkbox-requirements' style="margin-top: 32px;">
             <label class="label">Select Requirements</label><br><br>
                 {{#each data.[0]}}
                     <input type="checkbox" name="requirements" value="{{@key}}" id="id_"+"{{@key}}">
@@ -102,16 +99,15 @@
         </div>
         <div class="input" style="right:40%;">
             <label class="label">Minimum Score</label>
-            <input type="text" name="min" placeholder={{min}}></input>
+            <input type="text" name="min" id='min-score' placeholder={{min}}></input>
         </div>
         <div class="input" style="right: 20%;">
             <label class="label">Maximum Score</label>
-            <input type="text" name="max" placeholder="{{max}}"></input>
+            <input type="text" name="max" id='max-score' placeholder="{{max}}"></input>
         </div>
         <input name="table" value="{{table}}" style="display:none;">
         <input name="q" value="{{q}}" style="display:none;">
-        <button type="submit" value="Submit" style="position: absolute; top: 0%; right:10%">Apply</button>
-    </form>
+        <button type="submit" value="Submit" id='apply-filter-button' style="position: absolute; top: 0%; right:10%">Apply</button>
 </div>
 
 <div id="brand_info_overlay" class="overlay">
@@ -180,24 +176,46 @@
 </div>
 
 <script>
-    Plotly.newPlot("data_table_container", {{{graph}}});
+function getGraph(data) {
+    $("#data_table_container").empty()
+        Plotly.newPlot("data_table_container", data);
 
-    document.getElementById('data_table_container').on('plotly_click', data => {
-        let brand;
+        document.getElementById('data_table_container').on('plotly_click', data => {
+            let brand;
 
-        //last index should have the 'nearest' point
-        //data.points only contains points overlapping with the cursor, not all points
-        let pointData = data.points[data.points.length - 1];
-        let customData = pointData.data.customData;
+            //last index should have the 'nearest' point
+            //data.points only contains points overlapping with the cursor, not all points
+            let pointData = data.points[data.points.length - 1];
+            let customData = pointData.data.customData;
 
-        brand = customData[pointData.text].brand
+            brand = customData[pointData.text].brand
 
-        $.get(`./brand_data?brand=${encodeURIComponent(brand)}`, (data) => {
-            let html = $.parseHTML(data)
-            $("#brand_info_overlay_inner").html(html)
-            $("#brand_info_overlay").fadeIn(750)
-        })
-    });
+            $.get(`./brand_data?brand=${encodeURIComponent(brand)}`, (data) => {
+                let html = $.parseHTML(data)
+                $("#brand_info_overlay_inner").html(html)
+                $("#brand_info_overlay").fadeIn(750)
+            })
+        });
+}
+
+
+function updateGraph() {
+    
+    requirements = []
+    
+    $("#checkbox-requirements").children("input:checked").each((i,el) => requirements.push($(el).attr('value')))
+    
+    console.log(requirements)
+    
+    $.get(`./transparency_graph?q=${encodeURIComponent($("#query").val())}&min=${encodeURIComponent($("#min-score").val())}&max=${encodeURIComponent($("#max-score").val())}&requirements=${encodeURIComponent(requirements)}`, getGraph);
+            //min, max, requirements, 
+}
+
+    $.get("./transparency_graph", getGraph)
+    
+    $("#table-search-button").on('click', updateGraph)
+    $("#apply-filter-button").on('click', updateGraph)
+
 </script>
 
 <script>
